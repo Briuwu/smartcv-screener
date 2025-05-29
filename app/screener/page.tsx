@@ -11,6 +11,7 @@ import { analyzeMatch, validateResume } from "../ai-screener";
 import { ResumeClassification } from "../ai-screener/schema";
 import { ResultCard } from "@/components/result-card";
 import { CSVLink } from "react-csv";
+import { ResultCardSkeleton } from "@/components/result-card-skeleton";
 
 export default function ScreenerPage() {
   const [isPending, startTransition] = useTransition();
@@ -18,6 +19,8 @@ export default function ScreenerPage() {
   const [jobDescription, setJobDescription] = useState("");
   const [results, setResults] = useState<ResumeClassification[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [isValidating, setIsValidating] = useState(false);
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
 
   const handleUpload = (files: UploadedFile[]) => {
     setUploadedFiles(files);
@@ -33,21 +36,24 @@ export default function ScreenerPage() {
       return;
     }
 
+    setIsValidating(true);
     startTransition(async () => {
-      const validatedResumes = await validateResume(uploadedFiles);
-
       toast.info("Validating resumes...");
+      const validatedResumes = await validateResume(uploadedFiles);
       if (validatedResumes.length === 0) {
         toast.error("No valid resumes found");
         setError("No valid resumes found");
         return;
       }
+      setIsValidating(false);
 
+      setIsAnalyzing(true);
       toast.info("Analyzing resumes...");
       const results = await analyzeMatch(jobDescription, validatedResumes);
       setResults(results);
 
       toast.success("Analysis complete");
+      setIsAnalyzing(false);
     });
   };
 
@@ -73,7 +79,7 @@ export default function ScreenerPage() {
 
   return (
     <>
-      <div className="col-span-1 space-y-6 rounded-xl border border-slate-200 bg-white p-6 shadow-sm md:col-span-4">
+      <div className="col-span-1 space-y-6 self-start rounded-xl border border-slate-200 bg-white p-6 shadow-sm lg:col-span-4">
         <div className="space-y-2">
           <h1 className="text-2xl font-bold tracking-tight text-slate-900">
             SmartCV Screener
@@ -92,7 +98,7 @@ export default function ScreenerPage() {
               <FileText className="h-5 w-5 text-emerald-500" />
               <span>
                 {uploadedFiles.length} file{uploadedFiles.length > 1 ? "s" : ""}{" "}
-                analyzed successfully
+                extracted successfully
               </span>
             </div>
           )}
@@ -131,7 +137,7 @@ export default function ScreenerPage() {
         )}
       </div>
 
-      <div className="col-span-1 space-y-5 md:col-span-8">
+      <div className="col-span-1 space-y-5 lg:col-span-8">
         {results.length > 0 && (
           <div className="flex items-center justify-between">
             <Button asChild>
@@ -146,9 +152,27 @@ export default function ScreenerPage() {
           </div>
         )}
         <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+          {isValidating && (
+            <div className="mb-3 flex items-center justify-center gap-2">
+              <p className="animate-pulse text-sm text-slate-500">
+                Validating resumes...
+              </p>
+              <Loader2 className="h-10 w-10 animate-spin" />
+            </div>
+          )}
+          {isAnalyzing && (
+            <div className="mb-3 flex items-center justify-center gap-2">
+              <p className="animate-pulse text-sm text-slate-500">
+                Analyzing resumes...
+              </p>
+              <Loader2 className="h-10 w-10 animate-spin" />
+            </div>
+          )}
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             {isPending ? (
-              <Loader2 className="col-span-full mx-auto h-10 w-10 animate-spin" />
+              Array.from({ length: uploadedFiles.length }).map((_, index) => (
+                <ResultCardSkeleton key={index} />
+              ))
             ) : results.length > 0 ? (
               sortedResults.map((result, index) => (
                 <ResultCard key={index} result={result} />

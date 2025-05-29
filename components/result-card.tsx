@@ -31,7 +31,7 @@ export function ResultCard({ result }: ResultCardProps) {
             <div className="flex items-center gap-2">
               <Badge
                 variant={isAccepted ? "default" : "destructive"}
-                className={`flex items-center gap-1 ${
+                className={`flex items-center gap-1 capitalize ${
                   isAccepted
                     ? "bg-emerald-100 text-emerald-700 hover:bg-emerald-200"
                     : "bg-red-100 text-red-700 hover:bg-red-200"
@@ -42,7 +42,7 @@ export function ResultCard({ result }: ResultCardProps) {
                 ) : (
                   <XCircle className="h-3 w-3" />
                 )}
-                {result.status.charAt(0).toUpperCase() + result.status.slice(1)}
+                {result.status}
               </Badge>
               <Badge variant="outline" className="flex items-center gap-1">
                 {result.confidence}%
