@@ -28,13 +28,10 @@ Upload multiple resumes, input a job description, and let AI automatically class
 
 ## 🛠️ Tech Stack
 
-- **Frontend**: Next.js + Tailwind CSS
-- **Backend**: FastAPI (Python) or Node.js (Express)
-- **AI Models**: OpenAI GPT-4 (for classification and extraction)
-- **Parsing**: PyMuPDF / pdfplumber (resume text extraction)
-- **Database**: PostgreSQL or Supabase
-- **Storage**: AWS S3 or Firebase Storage
-
+- **Fullstack**: Next.js + Tailwind CSS
+- **AI Models**: Mistral AI
+- **Parsing**: pdf-parse
+- 
 ---
 
 ## 📈 Future Features
@@ -47,23 +44,6 @@ Upload multiple resumes, input a job description, and let AI automatically class
 
 ---
 
-## 📄 License
-
-This project is licensed under the MIT License.
-
----
-
 ## 🙌 Contributing
 
 We welcome contributions! To get started, fork the repo, make your changes, and submit a pull request.
-
----
-
-## 📬 Contact
-
-For feature requests, questions, or demos:
-
-<!-- 📧 [hello@smartcv.io](mailto:hello@smartcv.io) -->
-<!-- 🌐 [www.smartcv.io](https://www.smartcv.io) *(Coming soon)* -->
-
----
