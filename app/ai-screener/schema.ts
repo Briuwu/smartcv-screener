@@ -2,6 +2,11 @@ import { z } from "zod";
 
 export const ResumeClassificationSchema = z.object({
   fileName: z.string().describe("The name of the file uploaded."),
+  confidence: z
+    .number()
+    .describe(
+      "The confidence score of the AI in the classification. A score between 0 and 100.",
+    ),
   status: z
     .enum(["accepted", "rejected"])
     .describe(

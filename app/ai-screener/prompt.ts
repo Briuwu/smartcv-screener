@@ -18,6 +18,7 @@ Your responsibilities are:
 
 {
   "fileName": "The name of the file (fileName) from the uploaded file.",
+  "confidence": "A score between 0 and 100 indicating the confidence of the AI in the classification.",
   "status": "accepted" | "rejected",
   "reason": "Short explanation why the candidate was accepted or rejected, based only on resume content.",
 

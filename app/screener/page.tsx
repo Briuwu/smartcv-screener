@@ -10,6 +10,7 @@ import { toast } from "sonner";
 import { analyzeMatch, validateResume } from "../ai-screener";
 import { ResumeClassification } from "../ai-screener/schema";
 import { ResultCard } from "@/components/result-card";
+import { CSVLink } from "react-csv";
 
 export default function ScreenerPage() {
   const [isPending, startTransition] = useTransition();
@@ -55,16 +56,24 @@ export default function ScreenerPage() {
     setJobDescription("");
   };
 
-  // sort the results by status "accepted" should be at top
+  // sort the results by status "accepted" should be at top, and the highest confidence should be at the top
   const sortedResults = results.sort((a, b) => {
     if (a.status === "accepted" && b.status === "rejected") return -1;
     if (a.status === "rejected" && b.status === "accepted") return 1;
-    return 0;
+    return b.confidence - a.confidence;
   });
+
+  const csvFormat = results.map((result) => ({
+    name: result.candidate.fullName,
+    email: result.candidate.email,
+    phone: result.candidate.phone,
+    status: result.status,
+    reason: result.reason,
+  }));
 
   return (
     <>
-      <div className="col-span-1 space-y-6 rounded-xl border border-slate-200 bg-white p-6 shadow-sm transition-all hover:shadow-md md:col-span-4">
+      <div className="col-span-1 space-y-6 rounded-xl border border-slate-200 bg-white p-6 shadow-sm md:col-span-4">
         <div className="space-y-2">
           <h1 className="text-2xl font-bold tracking-tight text-slate-900">
             SmartCV Screener
@@ -97,8 +106,10 @@ export default function ScreenerPage() {
             <Textarea
               placeholder="Enter a job description and qualifications"
               className="min-h-[120px] resize-none border-slate-200 focus:border-slate-400 focus:ring-slate-400"
+              disabled={isPending}
               value={jobDescription}
               onChange={(e) => setJobDescription(e.target.value)}
+              rows={12}
             />
             <Button
               className="w-full bg-emerald-600 hover:bg-emerald-700"
@@ -111,6 +122,7 @@ export default function ScreenerPage() {
             <Button
               className="bg-red-600 hover:bg-red-700"
               onClick={handleClear}
+              disabled={isPending}
             >
               <Trash className="h-4 w-4" />
               Clear All
@@ -119,31 +131,46 @@ export default function ScreenerPage() {
         )}
       </div>
 
-      <div className="col-span-1 rounded-xl border border-slate-200 bg-white p-6 shadow-sm transition-all hover:shadow-md md:col-span-8">
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-          {isPending ? (
-            <Loader2 className="col-span-full mx-auto h-10 w-10 animate-spin" />
-          ) : results.length > 0 ? (
-            sortedResults.map((result, index) => (
-              <ResultCard key={index} result={result} />
-            ))
-          ) : (
-            <div className="col-span-full text-center">
-              {error ? (
-                <p className="text-red-500">{error}</p>
-              ) : (
-                <>
-                  <h2 className="text-xl font-medium text-slate-700">
-                    Results
-                  </h2>
-                  <p className="mt-2 text-sm text-slate-500">
-                    Upload files and a job description to see the analysis
-                    results here
-                  </p>
-                </>
-              )}
-            </div>
-          )}
+      <div className="col-span-1 space-y-5 md:col-span-8">
+        {results.length > 0 && (
+          <div className="flex items-center justify-between">
+            <Button asChild>
+              <CSVLink
+                data={csvFormat}
+                filename="smartcv-results.csv"
+                target="_blank"
+              >
+                Print Accepted Candidates
+              </CSVLink>
+            </Button>
+          </div>
+        )}
+        <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            {isPending ? (
+              <Loader2 className="col-span-full mx-auto h-10 w-10 animate-spin" />
+            ) : results.length > 0 ? (
+              sortedResults.map((result, index) => (
+                <ResultCard key={index} result={result} />
+              ))
+            ) : (
+              <div className="col-span-full text-center">
+                {error ? (
+                  <p className="text-red-500">{error}</p>
+                ) : (
+                  <>
+                    <h2 className="text-xl font-medium text-slate-700">
+                      Results
+                    </h2>
+                    <p className="mt-2 text-sm text-slate-500">
+                      Upload files and a job description to see the analysis
+                      results here
+                    </p>
+                  </>
+                )}
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </>

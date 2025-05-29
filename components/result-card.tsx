@@ -28,24 +28,29 @@ export function ResultCard({ result }: ResultCardProps) {
                 {result.fileName}
               </span>
             </div>
-            <Badge
-              variant={isAccepted ? "default" : "destructive"}
-              className={`flex items-center gap-1 ${
-                isAccepted
-                  ? "bg-emerald-100 text-emerald-700 hover:bg-emerald-200"
-                  : "bg-red-100 text-red-700 hover:bg-red-200"
-              }`}
-            >
-              {isAccepted ? (
-                <CheckCircle className="h-3 w-3" />
-              ) : (
-                <XCircle className="h-3 w-3" />
-              )}
-              {result.status.charAt(0).toUpperCase() + result.status.slice(1)}
-            </Badge>
+            <div className="flex items-center gap-2">
+              <Badge
+                variant={isAccepted ? "default" : "destructive"}
+                className={`flex items-center gap-1 ${
+                  isAccepted
+                    ? "bg-emerald-100 text-emerald-700 hover:bg-emerald-200"
+                    : "bg-red-100 text-red-700 hover:bg-red-200"
+                }`}
+              >
+                {isAccepted ? (
+                  <CheckCircle className="h-3 w-3" />
+                ) : (
+                  <XCircle className="h-3 w-3" />
+                )}
+                {result.status.charAt(0).toUpperCase() + result.status.slice(1)}
+              </Badge>
+              <Badge variant="outline" className="flex items-center gap-1">
+                {result.confidence}%
+              </Badge>
+            </div>
           </div>
         </CardHeader>
-        <CardContent className="space-y-4">
+        <CardContent className="flex h-full flex-col justify-between space-y-4">
           <div>
             <h4 className="mb-1 text-sm font-medium text-slate-700">Reason</h4>
             <p className="text-sm text-slate-600">{result.reason}</p>
