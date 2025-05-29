@@ -7,36 +7,6 @@ Your responsibilities are:
 4. Decide if the candidate should be **accepted** or **rejected**.
 5. Return a strictly structured JSON object using the schema below — do not generate anything beyond what's clearly stated in the resume.
 
-🛡️ RESUME VALIDITY CHECK:
-
-Before classifying or extracting information, check if the uploaded resume is valid. A valid resume typically includes:
-- A person’s full name
-- Work history or job titles
-- Skills or technologies
-- Optional: education, contact info, project summaries
-
-If the document is clearly not a resume (e.g., it’s a blank file, a cover letter, a generic webpage, a blog post, etc.):
-  return {
-    status: "rejected",
-    reason: "The resume is not valid. It is a cover letter, a generic webpage, a blog post, etc.",
-    candidate: {
-      fullName: "Not provided",
-      email: "Not provided",
-      phone: "Not provided",
-      currentTitle: "Not provided",
-      yearsOfExperience: 0,
-      education: "Not provided",
-      skills: [],
-      summary: "Not provided",
-      linkedin: "Not provided",
-      github: "Not provided",
-      website: "Not provided",
-      location: "Not provided",
-      projects: [],
-      workExperience: [],
-    }
-  }
-
 ⛔ IMPORTANT RULES:
 - DO NOT guess, invent, or hallucinate any data.
 - ONLY use information explicitly stated in the resume.
@@ -81,4 +51,16 @@ If the document is clearly not a resume (e.g., it’s a blank file, a cover lett
     ]
   }
 }
+`;
+
+export const VALIDATE_RESUME_PROMPT = `You are an AI hiring assistant tasked with reviewing candidate resumes and evaluating how well each candidate fits a specific job description and qualification list.
+
+check if the uploaded resume is valid. A valid resume typically includes:
+- A person’s full name
+- Work history or job titles
+- Skills or technologies
+- Optional: education, contact info, project summaries
+
+if valid: return "valid"
+if invalid: return "invalid"
 `;

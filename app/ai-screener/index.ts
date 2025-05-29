@@ -3,8 +3,9 @@
 import { UploadedFile } from "@/lib/types";
 import { mistral } from "@ai-sdk/mistral";
 import { ResumeClassificationSchema } from "./schema";
-import { SYSTEM_PROMPT } from "./prompt";
+import { SYSTEM_PROMPT, VALIDATE_RESUME_PROMPT } from "./prompt";
 import { generateObject } from "ai";
+import { z } from "zod";
 
 export async function analyzeMatch(
   jobDescription: string,
@@ -29,7 +30,36 @@ export async function analyzeMatch(
     maxRetries: 10,
   });
 
-  console.log(object);
-
   return object;
+}
+
+export async function validateResume(resume: UploadedFile[]) {
+  const validatedResumes = await Promise.all(
+    resume.map(async (file) => {
+      const { object } = await generateObject({
+        model: mistral("mistral-large-latest"),
+        schema: z.object({
+          status: z.enum(["valid", "invalid"]),
+        }),
+        messages: [
+          {
+            role: "system",
+            content: VALIDATE_RESUME_PROMPT,
+          },
+          {
+            role: "user",
+            content: file.fileContent,
+          },
+        ],
+      });
+
+      if (object.status === "valid") {
+        return file;
+      } else {
+        return null;
+      }
+    }),
+  );
+
+  return validatedResumes.filter((resume) => resume !== null);
 }

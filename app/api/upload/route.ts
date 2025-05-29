@@ -24,7 +24,10 @@ export async function POST(req: NextRequest) {
   try {
     const data = await pdfParse(buf, { max: 2 });
     return NextResponse.json(
-      { fileContent: data.text, fileName: file.name },
+      {
+        fileContent: data.text.replace(/\n/g, " ").replace(/\t/g, " "),
+        fileName: file.name,
+      },
       { status: 200 },
     );
   } catch (error) {

@@ -7,7 +7,7 @@ import type { UploadedFile } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { FileText, Loader2, Trash, Upload } from "lucide-react";
 import { toast } from "sonner";
-import { analyzeMatch } from "../ai-screener";
+import { analyzeMatch, validateResume } from "../ai-screener";
 import { ResumeClassification } from "../ai-screener/schema";
 import { ResultCard } from "@/components/result-card";
 
@@ -16,6 +16,7 @@ export default function ScreenerPage() {
   const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([]);
   const [jobDescription, setJobDescription] = useState("");
   const [results, setResults] = useState<ResumeClassification[]>([]);
+  const [error, setError] = useState<string | null>(null);
 
   const handleUpload = (files: UploadedFile[]) => {
     setUploadedFiles(files);
@@ -32,12 +33,23 @@ export default function ScreenerPage() {
       return;
     }
 
-    console.log(jobDescription, uploadedFiles);
-
     startTransition(async () => {
-      const result = await analyzeMatch(jobDescription, uploadedFiles);
-      console.log(result);
-      setResults(result);
+      const validatedResumes = await validateResume(uploadedFiles);
+
+      toast.info("Validating resumes...");
+      if (validatedResumes.length === 0) {
+        toast.error("No valid resumes found");
+        setError("No valid resumes found");
+        return;
+      }
+
+      console.log(validatedResumes);
+
+      toast.info("Analyzing resumes...");
+      const results = await analyzeMatch(jobDescription, validatedResumes);
+      setResults(results);
+
+      toast.success("Analysis complete");
     });
   };
 
@@ -45,6 +57,13 @@ export default function ScreenerPage() {
     setUploadedFiles([]);
     setJobDescription("");
   };
+
+  // sort the results by status "accepted" should be at top
+  const sortedResults = results.sort((a, b) => {
+    if (a.status === "accepted" && b.status === "rejected") return -1;
+    if (a.status === "rejected" && b.status === "accepted") return 1;
+    return 0;
+  });
 
   return (
     <>
@@ -108,16 +127,24 @@ export default function ScreenerPage() {
           {isPending ? (
             <Loader2 className="col-span-full mx-auto h-10 w-10 animate-spin" />
           ) : results.length > 0 ? (
-            results.map((result, index) => (
+            sortedResults.map((result, index) => (
               <ResultCard key={index} result={result} />
             ))
           ) : (
             <div className="col-span-full text-center">
-              <h2 className="text-xl font-medium text-slate-700">Results</h2>
-              <p className="mt-2 text-sm text-slate-500">
-                Upload files and a job description to see the analysis results
-                here
-              </p>
+              {error ? (
+                <p className="text-red-500">{error}</p>
+              ) : (
+                <>
+                  <h2 className="text-xl font-medium text-slate-700">
+                    Results
+                  </h2>
+                  <p className="mt-2 text-sm text-slate-500">
+                    Upload files and a job description to see the analysis
+                    results here
+                  </p>
+                </>
+              )}
             </div>
           )}
         </div>
