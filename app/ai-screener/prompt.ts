@@ -17,6 +17,7 @@ Your responsibilities are:
 🧩 SCHEMA:
 
 {
+  "fileName": "The name of the file (fileName) from the uploaded file.",
   "status": "accepted" | "rejected",
   "reason": "Short explanation why the candidate was accepted or rejected, based only on resume content.",
 

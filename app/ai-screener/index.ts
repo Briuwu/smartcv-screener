@@ -11,26 +11,34 @@ export async function analyzeMatch(
   jobDescription: string,
   uploadedFiles: UploadedFile[],
 ) {
-  const { object } = await generateObject({
-    model: mistral("mistral-large-latest"),
-    output: "array",
-    schema: ResumeClassificationSchema,
-    messages: [
-      {
-        role: "system",
-        content: SYSTEM_PROMPT,
-      },
-      {
-        role: "user",
-        content: `Job Description: ${jobDescription}\n\nResumes: ${JSON.stringify(
-          uploadedFiles,
-        )}`,
-      },
-    ],
-    maxRetries: 10,
-  });
+  const result = await Promise.all(
+    uploadedFiles.map(async (file) => {
+      const { object } = await generateObject({
+        model: mistral("mistral-large-latest"),
+        schema: ResumeClassificationSchema,
+        messages: [
+          {
+            role: "system",
+            content: SYSTEM_PROMPT,
+          },
+          {
+            role: "user",
+            content: `Job Description: ${jobDescription}\n\nResumes: ${JSON.stringify(file)}`,
+          },
+        ],
+      });
 
-  return object;
+      const parsedObject = ResumeClassificationSchema.safeParse(object);
+
+      if (!parsedObject.success) {
+        return null;
+      }
+
+      return parsedObject.data;
+    }),
+  );
+
+  return result.filter((resume) => resume !== null);
 }
 
 export async function validateResume(resume: UploadedFile[]) {

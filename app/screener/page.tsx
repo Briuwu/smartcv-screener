@@ -23,7 +23,6 @@ export default function ScreenerPage() {
   };
 
   const handleAnalyzeMatch = () => {
-    toast("Analyzing match...");
     if (uploadedFiles.length === 0) {
       console.log("No files uploaded");
       return;
@@ -42,8 +41,6 @@ export default function ScreenerPage() {
         setError("No valid resumes found");
         return;
       }
-
-      console.log(validatedResumes);
 
       toast.info("Analyzing resumes...");
       const results = await analyzeMatch(jobDescription, validatedResumes);
