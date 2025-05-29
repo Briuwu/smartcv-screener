@@ -59,6 +59,7 @@ export default function ScreenerPage() {
 
   const handleClear = () => {
     setUploadedFiles([]);
+    setResults([]);
     setJobDescription("");
   };
 
@@ -111,11 +112,10 @@ export default function ScreenerPage() {
             </h2>
             <Textarea
               placeholder="Enter a job description and qualifications"
-              className="min-h-[120px] resize-none border-slate-200 focus:border-slate-400 focus:ring-slate-400"
+              className="max-h-[120px] min-h-[120px] resize-none border-slate-200 focus:border-slate-400 focus:ring-slate-400 lg:max-h-[414px] lg:min-h-[414px]"
               disabled={isPending}
               value={jobDescription}
               onChange={(e) => setJobDescription(e.target.value)}
-              rows={12}
             />
             <Button
               className="w-full bg-emerald-600 hover:bg-emerald-700"
