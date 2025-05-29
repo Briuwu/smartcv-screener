@@ -1,36 +1,69 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# SmartCV Screener
 
-## Getting Started
+**AI-powered resume screening for recruiters.**  
+Upload multiple resumes, input a job description, and let AI automatically classify candidates based on their fit. Extract structured data from accepted resumes and get a clean, organized shortlist of top candidates.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 🚀 Features
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- 📥 **Bulk Resume Upload** — Drag-and-drop multiple PDF resumes
+- 🧠 **AI Matching Engine** — Classify resumes as Accepted or Rejected based on job description and qualifications
+- 📊 **Match Confidence Score** — See how well each candidate matches your criteria
+- 🧾 **Structured Candidate Profiles** — View extracted details like name, skills, experience, and education
+- 📤 **Export Options** — Download accepted candidates as CSV or shareable links
+- 🧩 **Modern & Minimal UI** — Clean recruiter-focused interface
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🧠 How It Works
 
-## Learn More
+1. Upload one or more PDF resumes.
+2. Paste the job description and list must-have qualifications.
+3. The AI model evaluates and classifies each resume.
+4. Accepted candidates are displayed as structured profile cards.
+5. Export the results or share with your team.
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🛠️ Tech Stack
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **Frontend**: Next.js + Tailwind CSS
+- **Backend**: FastAPI (Python) or Node.js (Express)
+- **AI Models**: OpenAI GPT-4 (for classification and extraction)
+- **Parsing**: PyMuPDF / pdfplumber (resume text extraction)
+- **Database**: PostgreSQL or Supabase
+- **Storage**: AWS S3 or Firebase Storage
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 📈 Future Features
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- ATS integration (Greenhouse, Lever)
+- Multi-job tracking
+- Collaboration/team mode
+- Interview scheduling plugin
+- Recruiter analytics dashboard
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License.
+
+---
+
+## 🙌 Contributing
+
+We welcome contributions! To get started, fork the repo, make your changes, and submit a pull request.
+
+---
+
+## 📬 Contact
+
+For feature requests, questions, or demos:
+
+<!-- 📧 [hello@smartcv.io](mailto:hello@smartcv.io) -->
+<!-- 🌐 [www.smartcv.io](https://www.smartcv.io) *(Coming soon)* -->
+
+---
