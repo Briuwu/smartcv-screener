@@ -18,7 +18,9 @@ export const metadata: Metadata = {
   description:
     "SmartCV Screener is an AI-powered resume screening tool. Upload resumes, input your job description, and let AI automatically classify candidates and extract key profile information.",
   applicationName: "SmartCV Screener",
-  authors: [{ name: "Brian Millonte (briuwu)", url: "https://www.smartcv.io" }],
+  authors: [
+    { name: "Brian Millonte (briuwu)", url: "https://www.smartcv.vercel.app" },
+  ],
   creator: "SmartCV Team",
   keywords: [
     "resume screening",
@@ -30,45 +32,6 @@ export const metadata: Metadata = {
     "resume parser",
     "AI resume review",
   ],
-  // robots: {
-  //   index: true,
-  //   follow: true,
-  //   nocache: false,
-  // },
-  // themeColor: '#0F172A', // Dark slate
-  // colorScheme: 'light',
-  // openGraph: {
-  //   title: 'SmartCV Screener – AI Resume Screening for Recruiters',
-  //   description:
-  //     'Upload resumes, add job criteria, and let SmartCV Screener handle resume filtering and candidate profiling for you. Powered by AI.',
-  //   url: 'https://www.smartcv.io',
-  //   siteName: 'SmartCV Screener',
-  //   images: [
-  //     {
-  //       url: 'https://www.smartcv.io/og-image.png',
-  //       width: 1200,
-  //       height: 630,
-  //       alt: 'SmartCV Screener Dashboard Screenshot',
-  //     },
-  //   ],
-  //   locale: 'en_US',
-  //   type: 'website',
-  // },
-  // twitter: {
-  //   card: 'summary_large_image',
-  //   title: 'SmartCV Screener – AI Resume Screening for Recruiters',
-  //   description:
-  //     'Instantly classify resumes and extract candidate profiles with AI. Try SmartCV Screener now.',
-  //   site: '@smartcv_ai',
-  //   creator: '@smartcv_ai',
-  //   images: ['https://www.smartcv.io/og-image.png'],
-  // },
-  // icons: {
-  //   icon: '/favicon.ico',
-  //   shortcut: '/favicon-32x32.png',
-  //   apple: '/apple-touch-icon.png',
-  // },
-  // manifest: '/site.webmanifest',
 };
 
 export default function RootLayout({
@@ -77,12 +40,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className="scroll-smooth">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} bg-gradient-to-br from-slate-50 via-white to-slate-100 antialiased`}
       >
-        {children}
-        <Toaster richColors />
+        <main className="relative">{children}</main>
+        <Toaster richColors position="top-right" />
       </body>
     </html>
   );
